@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
         <title>Pomometer</title>
         <style>
             *{
                 user-select: none;
+            }
+            html{
+                background-color: #0d0d0d;
             }
             .box{
                 text-align: center;
@@ -17,34 +21,17 @@
                 font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
             }
             button{
-                -webkit-appearance: none;
                 align-items: center;
                 border: 1px solid transparent;
                 border-radius: 4px;
-                box-shadow: none;
-                display: inline-flex;
                 font-size: 1rem;
                 height: 2.25em;
-                justify-content: flex-start;
-                line-height: 1.5;
-                padding-bottom: calc(.375em - 1px);
-                padding-left: calc(.625em - 1px);
-                padding-right: calc(.625em - 1px);
-                padding-top: calc(.375em - 1px);
-                position: relative;
-                vertical-align: top;
-                background-color: #fff;
-                border-color: #dbdbdb;
+                background-color: #121212;
+                border-color: #3e3e3e;
                 border-width: 1px;
-                color: #363636;
+                color: #8a8a8a;
                 cursor: pointer;
-                justify-content: center;
-                padding-bottom: calc(.375em - 1px);
-                padding-left: .75em;
-                padding-right: .75em;
-                padding-top: calc(.375em - 1px);
-                text-align: center;
-                white-space: nowrap;
+                padding: calc(.375em - 1px) .75em;
                 box-sizing: inherit;
             }
             button:hover{
@@ -57,21 +44,30 @@
                 top: 0%;
                 left: 0%;
             }
+            #aword{
+                color: #00967fbe;
+                font-size: 140%;
+                padding-top: 20px;
+                font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+            }
         </style>
     </head>
     <body>
-        <div class="time">test</div>
+        <div class="time">Please start</div>
         <div class="box">
             <div class="pomometer">25:00</div>
-            <div id="buttons">
+            <div id="main">
                 <button onclick="play()">开始</button>
                 <button onclick="shortPlay()">短休息</button>
                 <button onclick="longPlay()">长休息</button>
+                <button onclick="musicPlay()">音乐</button>
+                <div id="aword">在黑暗中努力寻找光的方向</div>
             </div>
+            <audio src="./backMusic.mp3" preload="auto" autoplay loop></audio>
         </div>
         <footer>
             <script>
-                var pomometer=document.querySelector('.pomometer'),buttons=document.querySelector('#buttons'),time=document.querySelector('.time'),displayTime=1,last;
+                var pomometer=document.querySelector('.pomometer'),main=document.querySelector('#main'),time=document.querySelector('.time'),displayTime=1,last,outMain=true;
                 var interval=undefined;
                 function Play(SetMinute=24){
                     last=new Date();
@@ -82,19 +78,23 @@
                         let format=function(num){return (num<=9?"0":"")+num;};
                         time.innerText=`${format(now.getHours())}:${format(now.getMinutes())}:${format(now.getSeconds())}`;
                         pomometer.innerText=format(SetMinute-Minutes)+":"+format(59-Seconds);
-                        if(displayTime==0)buttons.style.display="none";
+                        if(displayTime==0&&outMain)main.style.display="none";
                         else --displayTime;
                     }, 300);
-                    buttons.style.display="none";
+                    main.style.display="none";
                     window.onmousemove=()=>{
-                        buttons.style.display="inline";
+                        main.style.display="inline";
                         displayTime=1;
                     }
                 }
 
+                main.addEventListener('mouseover',()=>outMain=false);
+                main.addEventListener('mouseleave',()=>outMain=true);
+
                 function play(){Play(24)}
                 function shortPlay(){Play(4)}
                 function longPlay(){Play(14)}
+                function musicPlay(){let audio=document.querySelector('audio');if(audio.paused)audio.play();else audio.pause();}
             </script>
         </footer>
     </body>
