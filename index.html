@@ -64,7 +64,7 @@
                 <button onclick="musicPlay()">音乐</button>
                 <div id="aword">在黑暗中努力寻找光的方向</div>
             </div>
-            <audio src="./backMusic.mp3" preload="auto" autoplay loop></audio>
+            <audio preload="auto" autoplay loop></audio>
         </div>
         <footer>
             <script>
@@ -98,7 +98,7 @@
                 function play(){Play(24)}
                 function shortPlay(){Play(4)}
                 function longPlay(){Play(14)}
-                function musicPlay(){let audio=document.querySelector('audio');if(audio.paused)audio.play();else audio.pause();}
+                function musicPlay(){let audio=document.querySelector('audio');if(audio.src=='')audio.src="./backMusic_AC3.mp3";if(audio.paused)audio.play();else audio.pause();}
             </script>
         </footer>
     </body>
