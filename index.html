@@ -58,8 +58,8 @@
             <div class="pomometer">25:00</div>
             <div id="main">
                 <button onclick="play()">开始</button>
-                <button onclick="shortPlay()">短休息</button>
-                <button onclick="longPlay()">长休息</button>
+                <button onclick="shortPlay()">短休</button>
+                <button onclick="longPlay()">长休</button>
                 <button onclick="musicPlay()">音乐</button>
                 <div id="aword">在黑暗中努力寻找光的方向</div>
             </div>
@@ -67,19 +67,22 @@
         </div>
         <footer>
             <script>
-                var pomometer=document.querySelector('.pomometer'),main=document.querySelector('#main'),time=document.querySelector('.time'),displayTime=1,last,outMain=true;
+                var pomometer=document.querySelector('.pomometer'),main=document.querySelector('#main'),time=document.querySelector('.time'),displayTime=1,last,outMain=true,_last;
                 var interval=undefined;
                 function Play(SetMinute=24){
                     last=new Date();
                     !(interval==undefined)?clearInterval(interval):null;
                     interval=setInterval(() => {
-                        let now=new Date(),Minutes=(now.getMinutes()-last.getMinutes()),Seconds=now.getSeconds()-last.getSeconds();
-                        if(Minutes<0)Minutes+=60;if(Seconds<0)Seconds+=60,--Minutes;
-                        let format=function(num){return (num<=9?"0":"")+num;};
-                        time.innerText=`${format(now.getHours())}:${format(now.getMinutes())}:${format(now.getSeconds())}`;
-                        pomometer.innerText=format(SetMinute-Minutes)+":"+format(59-Seconds);
-                        if(displayTime==0&&outMain)main.style.display="none";
-                        else --displayTime;
+                        let now=new Date();
+                        if(now.getSeconds()!=_last){
+                            _last=now.getSeconds();
+                            let Minutes=now.getMinutes()-last.getMinutes(),Seconds=now.getSeconds()-last.getSeconds(),format=function(num){return (num<=9?"0":"")+num;};
+                            if(Minutes<0)Minutes+=60;if(Seconds<0)Seconds+=60,--Minutes;
+                            time.innerText=`${format(now.getHours())}:${format(now.getMinutes())}:${format(now.getSeconds())}`;
+                            pomometer.innerText=format(Math.abs(SetMinute-Minutes))+":"+format(59-Seconds);
+                            if(displayTime==0&&outMain)main.style.display="none";
+                            else --displayTime;
+                        }
                     }, 300);
                     main.style.display="none";
                     window.onmousemove=()=>{
